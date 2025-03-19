@@ -1,0 +1,142 @@
+/* General container styles */
+.container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Styling for headings */
+.header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+h3 {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Input field and button styling */
+.input-container {
+    margin-bottom: 20px;
+}
+
+.input {
+    padding: 10px;
+    width: 250px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.add-button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color: #45a049;
+}
+
+button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+/* Ingredients list */
+.ingredients-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.ingredient-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.edit-button, .delete-button {
+    padding: 5px 10px;
+    margin-left: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-button {
+    background-color: #FFA500;
+}
+
+.delete-button {
+    background-color: #F44336;
+}
+
+.edit-button:hover {
+    background-color: #e59400;
+}
+
+.delete-button:hover {
+    background-color: #e02f2f;
+}
+
+/* Recipes list */
+.recipes-container {
+    margin-top: 20px;
+}
+
+.recipes-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recipe-item {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.select-button {
+    padding: 8px 15px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.select-button:hover {
+    background-color: #007b8a;
+}
+
+/* Recipe details */
+.recipe-details {
+    margin-top: 30px;
+}
+
+.recipe-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.ingredient-details {
+    margin-bottom: 10px;
+}
+
+.response-message {
+    color: green;
+    font-weight: bold;
+}
+
+.error-message {
+    color: red;
+}

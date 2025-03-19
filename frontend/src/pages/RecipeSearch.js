@@ -55,87 +55,125 @@ function RecipeSearch() {
             console.log("Response from backend:", response.data);
             
         } catch (error) {
-            console.error("Error:", error.response?.data?.detail || "Unknown error");
-            setError(error.response?.data?.detail || "Something went wrong");
+            console.error("Error:", error.response?.data?.detail || "Unknown error in the Frontend!");
+            setError(error.response?.data?.detail || "Something went wrong in the Frontedn!");
         } finally {
             setLoading(false)
         }
     };
 
-    function sendID(id) {
-        setRecipeDetails(null)
-        setrecipeDetailsResponseMesssage("")
-        setDetailsError(null)
-
+    async function sendID(id) {
+        setRecipeDetails(null);
+        setrecipeDetailsResponseMesssage("");
+        setDetailsError(null);
+    
         try {
-            const response = axios.post("http://127.0.0.1:8000/search_id/", {
-                id: id
+            
+            const response = await axios.post("http://127.0.0.1:8000/search_id/", {
+                id: id  
             });
-
-            setRecipeDetails(response.data.recipe_details || [])
-            setrecipeDetailsResponseMesssage(response.message)
-
-            console.log("ID Backend data -> ". response.data)
+    
+            
+            setRecipeDetails(response.data.recipe_details || []);
+            setrecipeDetailsResponseMesssage(response.data.message);
+            setRecipes(null); 
+    
+            // Log the full response for debugging
+            console.log("ID Backend data ->", response.data);
         } catch (error) {
-            console.error("Error:", error.response?.data?.detail || "Unknown error"); 
-            setDetailsError(error.response?.data?.detail || "Something went wrong");
+            // Improved error handling with more details
+            if (error.response) {
+                console.error("Error response from backend:", error.response.data);
+                setDetailsError(error.response?.data?.detail || "Something went wrong on the backend!");
+            } else if (error.request) {
+                console.error("No response received:", error.request);
+                setDetailsError("No response from the server!");
+            } else {
+                console.error("Request error:", error.message);
+                setDetailsError("An error occurred while sending the request!");
+            }
         }
-        setrecipeID(id)
-        //MAY NOT NEED THE SET_RECIPE
+    
+        setrecipeID(id);
         
-
-        // NEED SEND TO BACKEND TO THEN GET RESULTS OF THE RECIPE AND GO TO NEXT PAGE -> RECIPE_DETAILS
     }
+    
 
     return (
-        <div>
-            <h2>Enter Ingredients You Have on Hand!</h2>
-            <input
-                type="text"
-                value={ingredient}
-                onChange={handleChange}
-                placeholder="Enter Ingredient"
-            />
-            <button onClick={handleSubmit}>Add</button>
-
+        <div className="container">
+            <h2 className="header">Enter Ingredients You Have on Hand!</h2>
+            <div className="input-container">
+                <input
+                    type="text"
+                    value={ingredient}
+                    onChange={handleChange}
+                    placeholder="Enter Ingredient"
+                    className="input"
+                />
+                <button onClick={handleSubmit} className="add-button">Add</button>
+            </div>
+    
             <h3>Your Ingredients:</h3>
-            <ul>
+            <ul className="ingredients-list">
                 {ingredientsList.map((item, index) => (
-                    <li key={index}>
+                    <li key={index} className="ingredient-item">
                         {item}
-                        <button onClick={() => handleEdit(index)}>Edit</button>
-                        <button onClick={() => handleDelete(index)}>Delete</button>
+                        <button onClick={() => handleEdit(index)} className="edit-button">Edit</button>
+                        <button onClick={() => handleDelete(index)} className="delete-button">Delete</button>
                     </li>
                 ))}
             </ul>
-
+    
             <h4>Ready to Search? Hit Submit!</h4>
-            <button onClick={searchRecipe} disabled={loading}>
+            <button onClick={searchRecipe} disabled={loading} className="search-button">
                 {loading ? "Searching...." : "Search Recipe"}
             </button>
-
-            {responseMessage && <p>{responseMessage}</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
-
+    
+            {responseMessage && <p className="response-message">{responseMessage}</p>}
+            {error && <p className="error-message">{error}</p>}
+    
             {recipes && recipes.length > 0 && (
-                <div>
+                <div className="recipes-container">
                     <h3>Recipes Found:</h3>
-                    <ul>
+                    <ul className="recipes-list">
                         {recipes.map((recipe) => (
-                            <li key={recipe.id}>
+                            <li key={recipe.id} className="recipe-item">
                                 <strong>{recipe.title}</strong>
                                 <p><strong>Used Ingredients:</strong> {recipe.used_ingredients.join(", ")}</p>
                                 <p><strong>Missed Ingredients:</strong> {recipe.missed_ingredients.join(", ")}</p>
-                                <button onClick={() => sendID(recipe.id)}>Select Recipe</button>
-
+                                <button onClick={() => sendID(recipe.id)} className="select-button">Select Recipe</button>
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
-
+    
+            {recipeDetails && (
+                <div className="recipe-details">
+                    <h3>Recipe Details:</h3>
+                    <strong>{recipeDetails.title}</strong>
+                    <img src={recipeDetails.image} alt={recipeDetails.title} className="recipe-image" />
+                    
+                    {/* Fallback for cooking_minutes */}
+                    <h4>Cooking Time: {recipeDetails.cooking_minutes !== null ? recipeDetails.cooking_minutes : "N/A"} minutes</h4>
+    
+                    <h4>Recipe Details: </h4>
+                    <ul>
+                        {recipeDetails.ingredients && recipeDetails.ingredients.length > 0 ? (
+                            recipeDetails.ingredients.map((ingredient, index) => (
+                                <li key={index} className="ingredient-details">
+                                    {ingredient.amount} {ingredient.unit} of {ingredient.name}
+                                </li>
+                            ))
+                        ) : (
+                            <p>No ingredients available</p>
+                        )}
+                    </ul>
+                </div>
+            )}
         </div>
     );
+    
 }
 
 export default RecipeSearch;
