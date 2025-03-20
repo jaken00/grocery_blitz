@@ -49,10 +49,11 @@ function RecipeSearch() {
             });
 
             setRecipes(response.data.recipes || []);
-            setcacheRecipes(response.data.recipe || []);
+            setcacheRecipes(response.data.recipes || []);
             setResponseMessage(response.data.message || "Recipes found");
 
             console.log("Response from backend:", response.data);
+            console.log("Cached Recipes in Search Portion:", cacheRecipes)
             
         } catch (error) {
             console.error("Error:", error.response?.data?.detail || "Unknown error in the Frontend!");
@@ -61,6 +62,19 @@ function RecipeSearch() {
             setLoading(false)
         }
     };
+
+    function backToRecipeList(){
+        console.log(cacheRecipes)
+        
+        setRecipeDetails(null);
+        setrecipeDetailsResponseMesssage("");
+        setDetailsError(null);
+
+        setRecipes(cacheRecipes)
+
+        console.log("Recipes Returned!")
+    
+    }
 
     async function sendID(id) {
         setRecipeDetails(null);
@@ -154,7 +168,7 @@ function RecipeSearch() {
                     <strong>{recipeDetails.title}</strong>
                     <img src={recipeDetails.image} alt={recipeDetails.title} className="recipe-image" />
                     
-                    {/* Fallback for cooking_minutes */}
+                    
                     <h4>Cooking Time: {recipeDetails.cooking_minutes !== null ? recipeDetails.cooking_minutes : "N/A"} minutes</h4>
     
                     <h4>Recipe Details: </h4>
@@ -169,6 +183,7 @@ function RecipeSearch() {
                             <p>No ingredients available</p>
                         )}
                     </ul>
+                    <button onClick={backToRecipeList}>Back to Recipe List</button>
                 </div>
             )}
         </div>
